@@ -50,6 +50,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithoutNamingStrategySetting()
     {
         $config = array(
@@ -64,6 +67,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\ORM\Mapping\NamingStrategy', $ormConfig->getNamingStrategy());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithNamingStrategyObject()
     {
         $namingStrategy = $this->getMock('Doctrine\ORM\Mapping\NamingStrategy');
@@ -83,6 +89,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($namingStrategy, $ormConfig->getNamingStrategy());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithNamingStrategyReference()
     {
         $namingStrategy = $this->getMock('Doctrine\ORM\Mapping\NamingStrategy');
@@ -101,6 +110,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($namingStrategy, $ormConfig->getNamingStrategy());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillNotInstantiateConfigWithInvalidNamingStrategyReference()
     {
         $config = array(
@@ -117,7 +129,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->factory->createService($this->serviceManager);
     }
 
-
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithoutEntityListenerResolverSetting()
     {
         $config = array(
@@ -132,6 +146,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\ORM\Mapping\EntityListenerResolver', $ormConfig->getEntityListenerResolver());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithEntityListenerResolverObject()
     {
         $entityListenerResolver = $this->getMock('Doctrine\ORM\Mapping\EntityListenerResolver');
@@ -151,6 +168,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($entityListenerResolver, $ormConfig->getEntityListenerResolver());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillInstantiateConfigWithEntityListenerResolverReference()
     {
         $entityListenerResolver = $this->getMock('Doctrine\ORM\Mapping\EntityListenerResolver');
@@ -169,6 +189,9 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame($entityListenerResolver, $ormConfig->getEntityListenerResolver());
     }
 
+    /**
+     * @covers ConfigurationFactory::createService
+     */
     public function testWillNotInstantiateConfigWithInvalidEntityListenerResolverReference()
     {
         $config = array(

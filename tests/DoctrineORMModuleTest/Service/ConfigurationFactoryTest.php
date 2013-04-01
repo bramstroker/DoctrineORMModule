@@ -116,4 +116,72 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\ServiceManager\Exception\InvalidArgumentException');
         $this->factory->createService($this->serviceManager);
     }
+
+
+    public function testWillInstantiateConfigWithoutEntityListenerResolverSetting()
+    {
+        $config = array(
+            'doctrine' => array(
+                'configuration' => array(
+                    'test_default' => array(),
+                ),
+            ),
+        );
+        $this->serviceManager->setService('Config', $config);
+        $ormConfig = $this->factory->createService($this->serviceManager);
+        $this->assertInstanceOf('Doctrine\ORM\Mapping\EntityListenerResolver', $ormConfig->getEntityListenerResolver());
+    }
+
+    public function testWillInstantiateConfigWithEntityListenerResolverObject()
+    {
+        $entityListenerResolver = $this->getMock('Doctrine\ORM\Mapping\EntityListenerResolver');
+
+        $config = array(
+            'doctrine' => array(
+                'configuration' => array(
+                    'test_default' => array(
+                        'entity_listener_resolver' => $entityListenerResolver,
+                    ),
+                ),
+            ),
+        );
+        $this->serviceManager->setService('Config', $config);
+        $factory = new ConfigurationFactory('test_default');
+        $ormConfig = $factory->createService($this->serviceManager);
+        $this->assertSame($entityListenerResolver, $ormConfig->getEntityListenerResolver());
+    }
+
+    public function testWillInstantiateConfigWithEntityListenerResolverReference()
+    {
+        $entityListenerResolver = $this->getMock('Doctrine\ORM\Mapping\EntityListenerResolver');
+        $config = array(
+            'doctrine' => array(
+                'configuration' => array(
+                    'test_default' => array(
+                        'entity_listener_resolver' => 'test_entity_listener_resolver',
+                    ),
+                ),
+            ),
+        );
+        $this->serviceManager->setService('Config', $config);
+        $this->serviceManager->setService('test_entity_listener_resolver', $entityListenerResolver);
+        $ormConfig = $this->factory->createService($this->serviceManager);
+        $this->assertSame($entityListenerResolver, $ormConfig->getEntityListenerResolver());
+    }
+
+    public function testWillNotInstantiateConfigWithInvalidEntityListenerResolverReference()
+    {
+        $config = array(
+            'doctrine' => array(
+                'configuration' => array(
+                    'test_default' => array(
+                        'entity_listener_resolver' => 'test_entity_listener_resolver',
+                    ),
+                ),
+            ),
+        );
+        $this->serviceManager->setService('Config', $config);
+        $this->setExpectedException('Zend\ServiceManager\Exception\InvalidArgumentException');
+        $this->factory->createService($this->serviceManager);
+    }
 }

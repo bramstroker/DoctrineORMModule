@@ -4,6 +4,7 @@ namespace DoctrineORMModule\Options;
 
 use DoctrineORMModule\Options\DBALConfiguration;
 use Doctrine\ORM\Mapping\NamingStrategy;
+use Doctrine\ORM\Mapping\EntityListenerResolver;
 use Zend\Stdlib\Exception\InvalidArgumentException;
 
 /**
@@ -142,6 +143,14 @@ class Configuration extends DBALConfiguration
      * @var string|null|NamingStrategy
      */
     protected $namingStrategy;
+
+    /**
+     * Entity listener resolver or service name of the entity listener resolver
+     * to be set in ORM configuration (if any)
+     *
+     * @var string|null|EntityListenerResolver
+     */
+    protected $entityListenerResolver;
 
     /**
      * @param  array $datetimeFunctions
@@ -461,5 +470,38 @@ class Configuration extends DBALConfiguration
     public function getNamingStrategy()
     {
         return $this->namingStrategy;
+    }
+
+    /**
+     * @param  string|null|EntityListenerResolver $entityListenerResolver
+     * @return self
+     * @throws InvalidArgumentException           when the provided entity listener
+     *                                            resolver does not fit the expected type
+     */
+    public function setEntityListenerResolver($entityListenerResolver)
+    {
+        if (
+            null === $entityListenerResolver
+            || is_string($entityListenerResolver)
+            || $entityListenerResolver instanceof EntityListenerResolver
+        ) {
+            $this->entityListenerResolver = $entityListenerResolver;
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'entityListenerResolver must be either a string, a Doctrine\ORM\Mapping\EntityListenerResolver '
+                . 'instance or null, %s given',
+            is_object($entityListenerResolver) ? get_class($entityListenerResolver) : gettype($entityListenerResolver)
+        ));
+    }
+
+    /**
+     * @return string|null|EntityListenerResolver
+     */
+    public function getEntityListenerResolver()
+    {
+        return $this->entityListenerResolver;
     }
 }

@@ -148,6 +148,7 @@ class Configuration extends DBALConfiguration
      * Entity listener resolver or service name of the entity listener resolver
      * to be set in ORM configuration (if any)
      *
+     * @link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/events.html#entity-listeners-class
      * @var string|null|EntityListenerResolver
      */
     protected $entityListenerResolver;
